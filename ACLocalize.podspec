@@ -15,10 +15,10 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "Localize"
-  s.version      = "0.0.1"
+  s.name         = "ACLocalize"
+  s.version      = "1.0.0"
   s.summary      = "i18n"
-  s.platform     = :ios, "9.0"
+  s.platform     = :ios, "10.0"
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
   #   * Try to keep it short, snappy and to the point.
@@ -39,9 +39,15 @@ Pod::Spec.new do |s|
   #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
   #
 
-  s.license      = "MIT"
+  #s.license      = "MIT"
+
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
+  s.license = { :type => 'MIT', :text => <<-LICENSE
+                   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software
+                 LICENSE
+               }
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
@@ -66,7 +72,7 @@ Pod::Spec.new do |s|
 
   # s.platform     = :ios
   # s.platform     = :ios, "5.0"
-
+  s.swift_version = '4.2'
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"
   # s.osx.deployment_target = "10.7"
@@ -81,8 +87,8 @@ Pod::Spec.new do |s|
   #
 
   #s.source       = { :git => "http://EXAMPLE/Localize.git", :tag => "#{s.version}" }
-  s.source       = { :path => '.' }
-
+  #s.source       = { :path => '.' }
+    s.source       = { :git => "https://github.com/Amornthep/Localize.git", :tag => "#{s.version}" }
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
   #  CocoaPods is smart about how it includes source code. For source files
@@ -137,7 +143,5 @@ Pod::Spec.new do |s|
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # s.dependency "JSONKit", "~> 1.4"
   s.dependency "Apollo"
-  s.dependency "RxSwift"
-  s.dependency "RxCocoa"
   
 end
