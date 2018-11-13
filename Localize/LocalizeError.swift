@@ -24,6 +24,5 @@ public enum ErrorMessage:String{
 public enum LocalizeError: Error {
     case invalidInputException(code: ErrorCode ,message:ErrorMessage)
     case cacheException(code: ErrorCode ,message:ErrorMessage)
-    case loadException(code: ErrorCode ,message:String)
 }
 

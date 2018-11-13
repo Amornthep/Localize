@@ -27,12 +27,21 @@ public class LocalizeService: ILocalizeService {
         return text
     }
     
-    public func loadLanguage(input: LoadLanguageInput) throws {
+    public func loadLanguage(input: LoadLanguageInput, result: @escaping (NSError?) -> Void) throws {
         try input.validate()
         
         if !localizationCacheRepository.isLanguageExist(language: defaultLanguage){
-            try localizationRepository.get(namespace: namespace, language: defaultLanguage) {[weak self] (localizeList) in
-                self?.localizationCacheRepository.save(localizeList: localizeList)
+            localizationRepository.get(namespace: namespace, language: defaultLanguage) {[weak self] (localizeList, error)  in
+                if let localizeList = localizeList {
+                    self?.localizationCacheRepository.save(localizeList: localizeList)
+                    if self?.defaultLanguage == input.language{
+                        result(nil)
+                    }
+                }else if let error = error{
+                    if self?.defaultLanguage == input.language{
+                        result(error)
+                    }
+                }
             }
         }
         
@@ -41,9 +50,14 @@ public class LocalizeService: ILocalizeService {
         }
         
         if !localizationCacheRepository.isLanguageExist(language: input.language){
-            try localizationRepository.get(namespace: namespace, language: input.language) {[weak self] (localizeList) in
-                self?.localizationCacheRepository.save(localizeList: localizeList)
-                self?.postEvent(eventHandler: EventHandler.ON_LOAD_LANGUAGE_SUCCESS, userInfo: ["language":input.language])
+            localizationRepository.get(namespace: namespace, language: input.language) {[weak self] (localizeList, error) in
+                if let localizeList = localizeList {
+                    self?.localizationCacheRepository.save(localizeList: localizeList)
+                    self?.postEvent(eventHandler: EventHandler.ON_LOAD_LANGUAGE_SUCCESS, userInfo: ["language":input.language])
+                    result(nil)
+                }else if let error = error{
+                    result(error)
+                }
             }
         }
     }
@@ -55,7 +69,7 @@ public class LocalizeService: ILocalizeService {
     public func unRegisterEventHandler(_ observer: Any, eventHandler: EventHandler) {
         NotificationCenter.default.removeObserver(self,
                                                   name: NSNotification.Name(rawValue: eventHandler.rawValue),
-                                                          object: nil)
+                                                  object: nil)
     }
     
     public func registerEventHandler(_ observer: Any, selector aSelector: Selector, eventHandler: EventHandler) {

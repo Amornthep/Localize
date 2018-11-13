@@ -10,7 +10,7 @@ import CoreFoundation
 
 public protocol ILocalizeService {
     func getLocalizeText(input:GetLocalizeTextInput) throws ->String
-    func loadLanguage(input: LoadLanguageInput) throws
+    func loadLanguage(input: LoadLanguageInput, result: @escaping (NSError?) -> Void) throws
     func registerEventHandler(_ observer: Any, selector aSelector: Selector, eventHandler: EventHandler)
     func unRegisterEventHandler(_ observer: Any, eventHandler: EventHandler)
 }

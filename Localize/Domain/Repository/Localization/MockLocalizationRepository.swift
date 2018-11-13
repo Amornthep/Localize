@@ -9,7 +9,7 @@
 import CoreFoundation
 
 class MockLocalizationRepository: ILocalizationRepository {
-    func get(namespace: String, language: String, result: @escaping (LocalizeList) -> Void) throws {
+    func get(namespace: String, language: String , result: @escaping (LocalizeList?, NSError?) -> Void) {
         let localizeList = LocalizeList()
         
         if language == "en"{
@@ -19,9 +19,9 @@ class MockLocalizationRepository: ILocalizationRepository {
         }else if language == "vn"{
             
         }else{
-            throw LocalizeError.loadException(code: ErrorCode.UNABLE_TO_LOAD_CODE, message: "Language Notfound")
+            return result(nil , NSError(domain: "Localize", code: 0, userInfo: ["code":ErrorCode.UNABLE_TO_LOAD_CODE.rawValue,"Message":"Language Notfound"]))
         }
-        result(localizeList)
+        result(localizeList , nil)
     }
 
 }

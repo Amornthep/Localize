@@ -28,7 +28,7 @@ class LocalizeTests: XCTestCase {
     
     func testValidate() {
         do {
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: ""))
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: ""), result: {_ in})
         } catch LocalizeError.invalidInputException(let code, _) {
             XCTAssertEqual(code, ErrorCode.INVALID_LANGUAGE_CODE)
             return
@@ -49,7 +49,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"))
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {_ in})
             waitForExpectations(timeout: 5, handler: nil)
             XCTAssertEqual(notificationCall, true)
         } catch {
@@ -59,13 +59,13 @@ class LocalizeTests: XCTestCase {
     
     func testGetLocalizeFailed() {
         do {
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "gg"))
-        } catch LocalizeError.loadException(let code, _) {
-            return XCTAssertEqual(code, ErrorCode.UNABLE_TO_LOAD_CODE)
-        } catch {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "gg"), result: {
+                error in
+                XCTAssertNotNil(error)
+            })
+        }  catch {
             XCTFail()
         }
-        XCTFail()
     }
     
     func testValidateGetInput(){
@@ -92,7 +92,7 @@ class LocalizeTests: XCTestCase {
     
     func testGetTextSuccess(){
         do {
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"))
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {_ in})
             let text = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "product_not_found", language: "en"))
             XCTAssertEqual(text, "Product not found")
         } catch {
@@ -102,7 +102,7 @@ class LocalizeTests: XCTestCase {
     
     func testGetTHTextSuccess(){
         do {
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"))
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {_ in})
             let text = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "product_not_found", language: "th"))
             XCTAssertEqual(text, "ไม่พบสินค้า")
         } catch {
@@ -121,7 +121,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"))
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {_ in})
             let text = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "thankyou", language: "th"))
             XCTAssertEqual(text, "Thank You")
             waitForExpectations(timeout: 5, handler: nil)
@@ -142,7 +142,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"))
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {_ in })
             let text = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "product_out_of_stock", language: "th"))
             
             XCTAssertEqual(text, "product_out_of_stock")
