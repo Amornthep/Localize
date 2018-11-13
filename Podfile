@@ -6,8 +6,6 @@ target 'Localize' do
   use_frameworks!
 
   pod "Apollo"
-  pod "RxSwift"
-  pod "RxCocoa"
   # Pods for Localize
   target 'LocalizeTests' do
     inherit! :search_paths
