@@ -28,7 +28,7 @@ public class LocalizeList: NSObject, NSCoding {
         aCoder.encode(data, forKey: "data")
     }
     
-    public func getDta()->[String:[String:String]]{
+    public func getData()->[String:[String:String]]{
         return self.data
     }
 }
