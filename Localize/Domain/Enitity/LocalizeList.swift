@@ -15,7 +15,7 @@ public class LocalizeList: NSObject, NSCoding {
         
     }
     
-    init(data:[String:[String:String]]){
+    public init(data:[String:[String:String]]){
         self.data = data
     }
     
