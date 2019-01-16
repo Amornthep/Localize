@@ -10,6 +10,7 @@ import CoreFoundation
 
 public struct LoadLanguageInput {
     let language:String!
+    let forceUpdate:Bool!
     
     func validate() throws{
         if language == ""{
@@ -17,8 +18,9 @@ public struct LoadLanguageInput {
         }
     }
     
-    public init(language:String) {
+    public init(language:String, forceUpdate:Bool = false) {
         self.language = language
+        self.forceUpdate = forceUpdate
     }
 }
 

@@ -27,10 +27,16 @@ public class LocalizeService: ILocalizeService {
         return text
     }
     
+    public func loadLastModify(result: @escaping ([String:String]?,NSError?) -> Void){
+        localizationRepository.getLastModify(namespace: namespace) { (res, error) in
+            result(res, error)
+        }
+    }
+    
     public func loadLanguage(input: LoadLanguageInput, result: @escaping (NSError?) -> Void) throws {
         try input.validate()
         
-        if !localizationCacheRepository.isLanguageExist(language: defaultLanguage){
+        if !localizationCacheRepository.isLanguageExist(language: defaultLanguage) || input.forceUpdate{
             localizationRepository.get(namespace: namespace, language: defaultLanguage) {[weak self] (localizeList, error)  in
                 if let localizeList = localizeList {
                     self?.localizationCacheRepository.save(localizeList: localizeList)
@@ -49,7 +55,7 @@ public class LocalizeService: ILocalizeService {
             return
         }
         
-        if !localizationCacheRepository.isLanguageExist(language: input.language){
+        if !localizationCacheRepository.isLanguageExist(language: input.language) || input.forceUpdate{
             localizationRepository.get(namespace: namespace, language: input.language) {[weak self] (localizeList, error) in
                 if let localizeList = localizeList {
                     self?.localizationCacheRepository.save(localizeList: localizeList)

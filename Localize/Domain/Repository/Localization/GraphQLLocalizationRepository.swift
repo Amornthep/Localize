@@ -10,11 +10,16 @@ import CoreFoundation
 import Apollo
 
 public class GraphQLLocalizationRepository: ILocalizationRepository {
+    
     private var apollo:ApolloClient?
     
     public init(host:String){
         let url = URL(string: host)!
         self.apollo = ApolloClient(url: url)
+    }
+    
+    public func getLastModify(namespace: String, result: @escaping ([String : String]?, NSError?) -> Void) {
+        
     }
     
     public func get(namespace: String, language: String , result: @escaping (LocalizeList?, NSError?) -> Void){

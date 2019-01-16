@@ -110,6 +110,32 @@ class LocalizeTests: XCTestCase {
         }
     }
     
+    func testGetLastModify(){
+        localizeService?.loadLastModify(result: { (res, error) in
+            XCTAssertNil(res)
+            XCTAssertNotNil(error)
+        })
+        
+        let mockLocalizationRepo = MockLocalizationRepository()
+        let ramCacheRepo = RamLocalizationCacheRepository()
+        localizeService = LocalizeService(defaultLanguage: "en", namespace: "sellconnect", localizationRepository: mockLocalizationRepo, localizationCacheRepository: ramCacheRepo)
+        
+        localizeService?.loadLastModify(result: { (res, error) in
+            XCTAssertNil(error)
+            XCTAssertNotNil(res)
+        })
+    }
+    
+    func testGetForceUpdateTextSuccess(){
+        do {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th", forceUpdate: true), result: {_ in})
+            let text = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "product_not_found", language: "th"))
+            XCTAssertEqual(text, "ไม่พบสินค้า")
+        } catch {
+            XCTFail()
+        }
+    }
+    
     func testGetTextDefaultSuccess(){
         do {
             var notificationCall = false
