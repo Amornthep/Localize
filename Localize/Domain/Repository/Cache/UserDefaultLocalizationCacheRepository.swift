@@ -10,31 +10,47 @@ import CoreFoundation
 
 public class UserDefaultLocalizationCacheRepository: ILocalizationCacheRepository {
     let LOCALIZE_KEY = "Localize"
-    var localizeList:LocalizeList?
+    let LAST_MODIFY_KEY = "LastModify"
+    var localizeList:[String:LocalizeData] = [:]
+    
+    public func saveLocalizeData(localizeData: LocalizeData, result: @escaping (NSError?) -> Void) {
+        if let language = localizeData.language{
+            self.localizeList[language] = localizeData
+            UserDefaults.standard.set(localizeData, forKey: LOCALIZE_KEY+language)
+            result(nil)
+        }else{
+            result(NSError(domain: "LocalizationCache", code: 0, userInfo: ["code":"localization_unable_to_save_cache"]))
+        }
+    }
+    
+    public func getLocalizeData(language: String) -> LocalizeData? {
+        return UserDefaults.standard.object(forKey: LOCALIZE_KEY+language) as? LocalizeData
+    }
+    
+    public func saveLastModify(data: [String : Double]) {
+        UserDefaults.standard.set(data, forKey: LAST_MODIFY_KEY)
+    }
+    
+    public func getLastModify() -> [String : Double]? {
+        return UserDefaults.standard.object(forKey: LAST_MODIFY_KEY) as? [String : Double]
+    }
     
     public func getText(key: String, language: String) -> String {
-        if let localize = self.localizeList?.data[language], let text = localize[key]{
+        if let localizeData = localizeList[language], let text = localizeData.data[key]{
             return text
         }
         return key
     }
     
-    public func save(localizeList: LocalizeList) {
-        for (language, data) in localizeList.data {
-            self.localizeList?.data.updateValue(data, forKey: language)
-        }
-        UserDefaults.standard.set(self.localizeList, forKey: LOCALIZE_KEY)
-    }
-    
     public func isLanguageExist(language: String) -> Bool {
-        copyInRam()
-        return localizeList?.data[language] != nil
+        copyInRam(language: language)
+        return localizeList[language] != nil
     }
     
-    func copyInRam(){
-        localizeList = UserDefaults.standard.object(forKey: LOCALIZE_KEY) as? LocalizeList
-        if localizeList == nil {
-            localizeList = LocalizeList()
+    func copyInRam(language: String){
+        let localizeData = UserDefaults.standard.object(forKey: LOCALIZE_KEY+language) as? LocalizeData
+        if let localizeData = localizeData {
+            localizeList[language] = localizeData
         }
     }
 }

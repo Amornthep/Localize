@@ -11,4 +11,7 @@ import CoreFoundation
 public enum EventHandler:String{
     case ON_KEY_NOT_EXIST = "onKeyNotExist"
     case ON_LOAD_LANGUAGE_SUCCESS = "onLaodLanguageSucess"
+    case ON_LOAD_LANGUAGE_FAIL = "onLaodLanguageFail"
+    case ON_LOAD_LASTMODIFY_FAIL = "onLoadLastModifyFail"
+    
 }

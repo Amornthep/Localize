@@ -9,28 +9,39 @@
 import CoreFoundation
 
 class MockLocalizationRepository: ILocalizationRepository {
-    func getLastModify(namespace: String, result: @escaping ([String : String]?, NSError?) -> Void) {
+    var loadcount = 0
+    func getLastModify(namespace: String, result: @escaping ([String : Double]?, NSError?) -> Void) {
         if namespace == "sellconnect"{
-            let res = ["en":"000000", "th":"000000000"]
+            if loadcount == 1{
+                let res = ["en":2.0, "th":2.0, "fr":2.0, "vn":2.0]
+                return  result(res , nil)
+            }
+            let res = ["en":1.0, "th":1.0, "fr":1.0, "vn":1.0]
             result(res , nil)
         }else{
             result(nil , NSError(domain: "Localize", code: 0, userInfo: ["code":ErrorCode.UNABLE_TO_LOAD_CODE.rawValue,"Message":"Namespace Notfound"]))
         }
     }
     
-    func get(namespace: String, language: String , result: @escaping (LocalizeList?, NSError?) -> Void) {
-        let localizeList = LocalizeList()
-        
+    func get(namespace: String, language: String , result: @escaping (LocalizeData?, NSError?) -> Void) {
+        let localizeList = LocalizeData()
+        localizeList.language = language
         if language == "en"{
-            localizeList.data[language] = ["hello":"Hello","thankyou":"Thank You","product_not_found":"Product not found"]
+            localizeList.data = ["hello":"Hello","thankyou":"Thank You","product_not_found":"Product not found"]
         }else if language == "th"{
-            localizeList.data[language] = ["hello":"สวัสดี", "product_not_found":"ไม่พบสินค้า"]
+            if loadcount == 1{
+                return result(nil , NSError(domain: "Localize", code: 0, userInfo: ["code":ErrorCode.UNABLE_TO_LOAD_CODE.rawValue,"Message":"Language Notfound"]))
+            }
+            localizeList.data = ["hello":"สวัสดี", "product_not_found":"ไม่พบสินค้า"]
+            loadcount += 1
         }else if language == "vn"{
-            
+            localizeList.data = ["hello":"สวัสดี", "product_not_found":"ไม่พบสินค้า"]
+        }else if language == "fr"{
+            localizeList.data = ["hello":"สวัสดี", "product_not_found":"ไม่พบสินค้า"]
         }else{
             return result(nil , NSError(domain: "Localize", code: 0, userInfo: ["code":ErrorCode.UNABLE_TO_LOAD_CODE.rawValue,"Message":"Language Notfound"]))
         }
         result(localizeList , nil)
     }
-
+    
 }

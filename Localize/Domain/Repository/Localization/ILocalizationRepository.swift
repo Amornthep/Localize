@@ -9,6 +9,6 @@
 import CoreFoundation
 
 public protocol ILocalizationRepository {
-    func get(namespace: String, language: String , result: @escaping (LocalizeList?, NSError?) -> Void)
-    func getLastModify(namespace: String, result: @escaping ([String:String]?, NSError?) -> Void)
+    func get(namespace: String, language: String , result: @escaping (LocalizeData?, NSError?) -> Void)
+    func getLastModify(namespace: String, result: @escaping ([String:Double]?, NSError?) -> Void)
 }

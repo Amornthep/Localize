@@ -13,7 +13,7 @@ public class LocalizeService: ILocalizeService {
     private var localizationRepository:ILocalizationRepository!
     private var namespace:String!
     private var defaultLanguage:String!
-    
+    let LANGUAGE = "language"
     public func getLocalizeText(input: GetLocalizeTextInput) throws -> String {
         try input.validate()
         var text = localizationCacheRepository.getText(key: input.key, language: input.language)
@@ -27,44 +27,66 @@ public class LocalizeService: ILocalizeService {
         return text
     }
     
-    public func loadLastModify(result: @escaping ([String:String]?,NSError?) -> Void){
-        localizationRepository.getLastModify(namespace: namespace) { (res, error) in
-            result(res, error)
+    private func saveLocalize(localizeData:LocalizeData, result: @escaping (NSError?) -> Void){
+        localizationCacheRepository.saveLocalizeData(localizeData: localizeData, result: {
+            [weak self] error in
+            guard let language = localizeData.language, let languageKey = self?.LANGUAGE else{
+                return
+            }
+            if let error = error{
+                self?.postEvent(eventHandler: EventHandler.ON_LOAD_LANGUAGE_FAIL, userInfo: [languageKey:language])
+                result(error)
+            }else {
+                self?.postEvent(eventHandler: EventHandler.ON_LOAD_LANGUAGE_SUCCESS, userInfo: [languageKey:language])
+                result(nil)
+            }
+        })
+    }
+    
+    private func getLocalizeAndSave(namespace:String, language:String, result: @escaping (NSError?) -> Void){
+        localizationRepository.get(namespace: namespace, language: language) {[weak self] (localizeData, error) in
+            if let error = error , let languageKey = self?.LANGUAGE{
+                self?.postEvent(eventHandler: EventHandler.ON_LOAD_LANGUAGE_FAIL, userInfo: [languageKey:language])
+                result(error)
+            }else if let localizeData = localizeData{
+                self?.saveLocalize(localizeData: localizeData, result: result)
+            }
         }
+    }
+    
+    private func compareLanguageNeedUpdate(lastModify:[String:Double], localizeData:LocalizeData)->Bool{
+        if let language = localizeData.language, let lastmodifyInCache = localizeData.lastModify, let languageLastModify = lastModify[language]{
+            return lastmodifyInCache < languageLastModify
+        }
+        return true
     }
     
     public func loadLanguage(input: LoadLanguageInput, result: @escaping (NSError?) -> Void) throws {
         try input.validate()
-        
-        if !localizationCacheRepository.isLanguageExist(language: defaultLanguage) || input.forceUpdate{
-            localizationRepository.get(namespace: namespace, language: defaultLanguage) {[weak self] (localizeList, error)  in
-                if let localizeList = localizeList {
-                    self?.localizationCacheRepository.save(localizeList: localizeList)
-                    if self?.defaultLanguage == input.language{
-                        result(nil)
-                    }
-                }else if let error = error{
-                    if self?.defaultLanguage == input.language{
-                        result(error)
-                    }
-                }
-            }
-        }
-        
-        if defaultLanguage == input.language{
-            return
-        }
-        
-        if !localizationCacheRepository.isLanguageExist(language: input.language) || input.forceUpdate{
-            localizationRepository.get(namespace: namespace, language: input.language) {[weak self] (localizeList, error) in
-                if let localizeList = localizeList {
-                    self?.localizationCacheRepository.save(localizeList: localizeList)
-                    self?.postEvent(eventHandler: EventHandler.ON_LOAD_LANGUAGE_SUCCESS, userInfo: ["language":input.language])
+        if let localizeData = localizationCacheRepository.getLocalizeData(language: input.language) {
+            if let lastModify = localizationCacheRepository.getLastModify(){
+                if compareLanguageNeedUpdate(lastModify: lastModify, localizeData: localizeData){
+                    getLocalizeAndSave(namespace: namespace, language: input.language, result: result)
+                }else{
                     result(nil)
-                }else if let error = error{
-                    result(error)
+                }
+            }else{
+                localizationRepository.getLastModify(namespace: namespace) {[weak self] (lastModify, error) in
+                    if error != nil{
+                        self?.postEvent(eventHandler: EventHandler.ON_LOAD_LASTMODIFY_FAIL, userInfo:nil)
+                        result(nil)
+                    }else if let lastModify = lastModify{
+                        self?.localizationCacheRepository.saveLastModify(data: lastModify)
+                        if self?.compareLanguageNeedUpdate(lastModify: lastModify, localizeData: localizeData) ?? false{
+                            self?.getLocalizeAndSave(namespace: (self?.namespace)!, language: input.language, result: result)
+                        }else{
+                            result(nil)
+                        }
+                    }
                 }
             }
+        }else{
+            getLocalizeAndSave(namespace: namespace, language: input.language, result: result)
         }
     }
     

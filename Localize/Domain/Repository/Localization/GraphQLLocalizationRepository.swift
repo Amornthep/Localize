@@ -18,11 +18,11 @@ public class GraphQLLocalizationRepository: ILocalizationRepository {
         self.apollo = ApolloClient(url: url)
     }
     
-    public func getLastModify(namespace: String, result: @escaping ([String : String]?, NSError?) -> Void) {
+    public func getLastModify(namespace: String, result: @escaping ([String : Double]?, NSError?) -> Void) {
         
     }
     
-    public func get(namespace: String, language: String , result: @escaping (LocalizeList?, NSError?) -> Void){
+    public func get(namespace: String, language: String , result: @escaping (LocalizeData?, NSError?) -> Void){
         let query = GetProductQuery(name: "", desc: "", price: 0, image: "")
         self.apollo?.fetch(query:  query){
             [weak self](res, error) in
@@ -30,7 +30,7 @@ public class GraphQLLocalizationRepository: ILocalizationRepository {
                 if let error = error{
                     result(nil , error)
                 }else{
-                  result(LocalizeList() , nil)
+                  result(LocalizeData() , nil)
                 }
             })
         }

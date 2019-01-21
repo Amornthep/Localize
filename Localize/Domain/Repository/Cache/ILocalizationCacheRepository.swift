@@ -10,6 +10,9 @@ import CoreFoundation
 
 public protocol ILocalizationCacheRepository{
     func getText(key:String, language:String) ->String
-    func save(localizeList: LocalizeList)
+    func saveLocalizeData(localizeData: LocalizeData, result: @escaping (NSError?) -> Void)
+    func getLocalizeData(language: String)->LocalizeData?
+    func saveLastModify(data:[String:Double])
+    func getLastModify()->[String:Double]?
     func isLanguageExist(language:String) ->Bool
 }

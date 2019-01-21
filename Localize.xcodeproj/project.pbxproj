@@ -16,12 +16,12 @@
 		29E6B4DF219960F2004B189A /* EventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4DE219960F2004B189A /* EventHandler.swift */; };
 		29E6B4E32199656D004B189A /* LocalizeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4E22199656D004B189A /* LocalizeService.swift */; };
 		29E6B4E72199675E004B189A /* ILocalizationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4E62199675E004B189A /* ILocalizationRepository.swift */; };
-		29E6B4EB219967C9004B189A /* LocalizeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4EA219967C9004B189A /* LocalizeList.swift */; };
+		29E6B4EB219967C9004B189A /* LocalizeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4EA219967C9004B189A /* LocalizeData.swift */; };
 		29E6B4ED21996931004B189A /* GraphQLLocalizationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4EC21996931004B189A /* GraphQLLocalizationRepository.swift */; };
 		29E6B4F021996ABA004B189A /* ILocalizationCacheRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4EF21996ABA004B189A /* ILocalizationCacheRepository.swift */; };
 		29E6B4F221996D52004B189A /* UserDefaultLocalizationCacheRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4F121996D52004B189A /* UserDefaultLocalizationCacheRepository.swift */; };
 		29E6B4F4219973D0004B189A /* MockLocalizationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4F3219973D0004B189A /* MockLocalizationRepository.swift */; };
-		29E6B4F62199743E004B189A /* RamLocalizationCacheRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4F52199743E004B189A /* RamLocalizationCacheRepository.swift */; };
+		29E6B4F62199743E004B189A /* MockRamLocalizationCacheRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4F52199743E004B189A /* MockRamLocalizationCacheRepository.swift */; };
 		29E6B4F821997758004B189A /* LocalizeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4F721997758004B189A /* LocalizeError.swift */; };
 		29E6B4FA219AD6C4004B189A /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B4F9219AD6C4004B189A /* API.swift */; };
 		357E040770F2673B975C6CD2 /* Pods_LocalizeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFC00EC5DB3B2B9D18ADA543 /* Pods_LocalizeTests.framework */; };
@@ -53,12 +53,12 @@
 		29E6B4DE219960F2004B189A /* EventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventHandler.swift; sourceTree = "<group>"; };
 		29E6B4E22199656D004B189A /* LocalizeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizeService.swift; sourceTree = "<group>"; };
 		29E6B4E62199675E004B189A /* ILocalizationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILocalizationRepository.swift; sourceTree = "<group>"; };
-		29E6B4EA219967C9004B189A /* LocalizeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizeList.swift; sourceTree = "<group>"; };
+		29E6B4EA219967C9004B189A /* LocalizeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizeData.swift; sourceTree = "<group>"; };
 		29E6B4EC21996931004B189A /* GraphQLLocalizationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLLocalizationRepository.swift; sourceTree = "<group>"; };
 		29E6B4EF21996ABA004B189A /* ILocalizationCacheRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ILocalizationCacheRepository.swift; sourceTree = "<group>"; };
 		29E6B4F121996D52004B189A /* UserDefaultLocalizationCacheRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultLocalizationCacheRepository.swift; sourceTree = "<group>"; };
 		29E6B4F3219973D0004B189A /* MockLocalizationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLocalizationRepository.swift; sourceTree = "<group>"; };
-		29E6B4F52199743E004B189A /* RamLocalizationCacheRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RamLocalizationCacheRepository.swift; sourceTree = "<group>"; };
+		29E6B4F52199743E004B189A /* MockRamLocalizationCacheRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRamLocalizationCacheRepository.swift; sourceTree = "<group>"; };
 		29E6B4F721997758004B189A /* LocalizeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizeError.swift; sourceTree = "<group>"; };
 		29E6B4F9219AD6C4004B189A /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		68F3ED6380628DB22E09FD74 /* Pods-Localize.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Localize.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Localize/Pods-Localize.debug.xcconfig"; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 		29E6B4E9219967B4004B189A /* Enitity */ = {
 			isa = PBXGroup;
 			children = (
-				29E6B4EA219967C9004B189A /* LocalizeList.swift */,
+				29E6B4EA219967C9004B189A /* LocalizeData.swift */,
 			);
 			path = Enitity;
 			sourceTree = "<group>";
@@ -191,7 +191,7 @@
 			children = (
 				29E6B4EF21996ABA004B189A /* ILocalizationCacheRepository.swift */,
 				29E6B4F121996D52004B189A /* UserDefaultLocalizationCacheRepository.swift */,
-				29E6B4F52199743E004B189A /* RamLocalizationCacheRepository.swift */,
+				29E6B4F52199743E004B189A /* MockRamLocalizationCacheRepository.swift */,
 			);
 			path = Cache;
 			sourceTree = "<group>";
@@ -404,9 +404,9 @@
 				29E6B4F021996ABA004B189A /* ILocalizationCacheRepository.swift in Sources */,
 				29E6B4DD21995F43004B189A /* ILocalizeService.swift in Sources */,
 				29E6B4FA219AD6C4004B189A /* API.swift in Sources */,
-				29E6B4EB219967C9004B189A /* LocalizeList.swift in Sources */,
+				29E6B4EB219967C9004B189A /* LocalizeData.swift in Sources */,
 				29E6B45421994332004B189A /* GetLocalizeTextInput.swift in Sources */,
-				29E6B4F62199743E004B189A /* RamLocalizationCacheRepository.swift in Sources */,
+				29E6B4F62199743E004B189A /* MockRamLocalizationCacheRepository.swift in Sources */,
 				29E6B4E72199675E004B189A /* ILocalizationRepository.swift in Sources */,
 				29E6B4ED21996931004B189A /* GraphQLLocalizationRepository.swift in Sources */,
 				29E6B4F821997758004B189A /* LocalizeError.swift in Sources */,
