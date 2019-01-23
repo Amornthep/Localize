@@ -23,7 +23,7 @@ class MockLocalizationRepository: ILocalizationRepository {
         }
     }
     
-    func get(namespace: String, language: String , result: @escaping (LocalizeData?, NSError?) -> Void) {
+    func get(language: String , result: @escaping (LocalizeData?, NSError?) -> Void) {
         let localizeList = LocalizeData()
         localizeList.language = language
         if language == "en"{
@@ -44,4 +44,12 @@ class MockLocalizationRepository: ILocalizationRepository {
         result(localizeList , nil)
     }
     
+    func getLanguages(namespace: String, limit: Int, nextToken: String?, result: @escaping (LanguageList?, NSError?) -> Void) {
+        if namespace != "false"{
+            let languageList = LanguageList(languages: [Language(languageId: "en", language: "English")], nextToken: "a")
+            result(languageList, nil)
+        }else{
+            result(nil , NSError(domain: "Localize", code: 0, userInfo: ["code":ErrorCode.UNABLE_TO_LOAD_CODE.rawValue,"Message":"Language Notfound"]))
+        }
+    }
 }

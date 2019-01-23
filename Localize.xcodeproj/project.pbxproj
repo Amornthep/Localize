@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2914C3AF21F856FD00EBCB9C /* LoadLanguagesInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2914C3AE21F856FD00EBCB9C /* LoadLanguagesInput.swift */; };
+		2914C3B121F85AC200EBCB9C /* LanguageList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2914C3B021F85AC200EBCB9C /* LanguageList.swift */; };
 		29E6B443219942F9004B189A /* Localize.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E6B439219942F8004B189A /* Localize.framework */; };
 		29E6B448219942F9004B189A /* LocalizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E6B447219942F9004B189A /* LocalizeTests.swift */; };
 		29E6B44A219942F9004B189A /* Localize.h in Headers */ = {isa = PBXBuildFile; fileRef = 29E6B43C219942F8004B189A /* Localize.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -41,6 +43,8 @@
 /* Begin PBXFileReference section */
 		008FD8D8C5CDB942C0A68446 /* Pods-Localize.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Localize.release.xcconfig"; path = "Pods/Target Support Files/Pods-Localize/Pods-Localize.release.xcconfig"; sourceTree = "<group>"; };
 		1A86177CC3A3BD61ECF9490C /* Pods_Localize.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Localize.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2914C3AE21F856FD00EBCB9C /* LoadLanguagesInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadLanguagesInput.swift; sourceTree = "<group>"; };
+		2914C3B021F85AC200EBCB9C /* LanguageList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageList.swift; sourceTree = "<group>"; };
 		29E6B439219942F8004B189A /* Localize.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Localize.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29E6B43C219942F8004B189A /* Localize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Localize.h; sourceTree = "<group>"; };
 		29E6B43D219942F8004B189A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 			children = (
 				29E6B45321994332004B189A /* GetLocalizeTextInput.swift */,
 				29E6B45621994352004B189A /* LoadLanguageInput.swift */,
+				2914C3AE21F856FD00EBCB9C /* LoadLanguagesInput.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -182,6 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				29E6B4EA219967C9004B189A /* LocalizeData.swift */,
+				2914C3B021F85AC200EBCB9C /* LanguageList.swift */,
 			);
 			path = Enitity;
 			sourceTree = "<group>";
@@ -410,6 +416,8 @@
 				29E6B4E72199675E004B189A /* ILocalizationRepository.swift in Sources */,
 				29E6B4ED21996931004B189A /* GraphQLLocalizationRepository.swift in Sources */,
 				29E6B4F821997758004B189A /* LocalizeError.swift in Sources */,
+				2914C3B121F85AC200EBCB9C /* LanguageList.swift in Sources */,
+				2914C3AF21F856FD00EBCB9C /* LoadLanguagesInput.swift in Sources */,
 				29E6B4E32199656D004B189A /* LocalizeService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

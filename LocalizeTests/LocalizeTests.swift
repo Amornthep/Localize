@@ -29,7 +29,7 @@ class LocalizeTests: XCTestCase {
     
     func testValidate() {
         do {
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: ""), result: {_ in})
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: ""), result: {_ in})
         } catch LocalizeError.invalidInputException(let code, _) {
             XCTAssertEqual(code, ErrorCode.INVALID_LANGUAGE_CODE)
             return
@@ -37,6 +37,38 @@ class LocalizeTests: XCTestCase {
             XCTFail()
         }
         XCTFail()
+    }
+    
+    func testValidateLanguages() {
+        do {
+            try localizeService?.loadLanguages(input: LoadLanguagesInput(namespace: "", limit: 0, nextToken: nil), result: { _,_  in})
+        } catch LocalizeError.invalidInputException(let code, _) {
+            XCTAssertEqual(code, ErrorCode.INVALID_PARAM_CODE)
+            return
+        } catch {
+            XCTFail()
+        }
+        XCTFail()
+    }
+    
+    func testLoadLanguagesFail(){
+        do {
+            try localizeService?.loadLanguages(input: LoadLanguagesInput(namespace: "false", limit: 10, nextToken: nil), result: { (list, error) in
+                XCTAssertNotNil(error)
+            })
+        } catch {
+            XCTFail()
+        }
+    }
+    
+    func testLoadLanguages(){
+        do {
+            try localizeService?.loadLanguages(input: LoadLanguagesInput(namespace: "true", limit: 10, nextToken: nil), result: { (list, error) in
+                XCTAssertNil(error)
+            })
+        } catch {
+            XCTFail()
+        }
     }
     
     func testLoadNewLanguageFail(){
@@ -50,7 +82,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th0"), result:{
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "th0"), result:{
                 error in
                 XCTAssertEqual(error?.userInfo["code"] as? String, ErrorCode.UNABLE_TO_LOAD_CODE.rawValue)
             })
@@ -72,7 +104,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {_ in})
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {_ in})
             waitForExpectations(timeout: 5, handler: nil)
             XCTAssertEqual(language, "en")
         } catch {
@@ -91,7 +123,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "fr"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "fr"), result: {
                 error in
                 XCTAssertEqual(error?.userInfo["code"] as? String, ErrorCode.UNABLE_TO_SAVE_CACHE_CODE.rawValue)
             })
@@ -113,10 +145,10 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "th"), result: {
                 error in
             })
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "th"), result: {
                 error in
                 XCTAssertEqual(error?.userInfo["code"] as? String, ErrorCode.UNABLE_TO_LOAD_CODE.rawValue)
             })
@@ -138,10 +170,10 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
                 error in
             })
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
                 error in
                 XCTAssertNil(error)
             })
@@ -165,7 +197,7 @@ class LocalizeTests: XCTestCase {
             expectation(forNotification:NSNotification.Name(rawValue: EventHandler.ON_LOAD_LANGUAGE_FAIL.rawValue),
                         object: nil,
                         handler: handler)
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "fr"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "fr"), result: {
                 error in
                 XCTAssertEqual(error?.userInfo["code"] as? String, ErrorCode.UNABLE_TO_SAVE_CACHE_CODE.rawValue)
             })
@@ -192,7 +224,7 @@ class LocalizeTests: XCTestCase {
             expectation(forNotification:NSNotification.Name(rawValue: EventHandler.ON_LOAD_LASTMODIFY_FAIL.rawValue),
                         object: nil,
                         handler: handler)
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
                 error in
                 XCTAssertNil(error)
             })
@@ -208,11 +240,11 @@ class LocalizeTests: XCTestCase {
             ramCacheRepo?.saveLastModify(data: ["en":1.0])
             ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en"), result: {_ in
             })
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
                 error in
                 XCTAssertNil(error)
             })
-            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "a", language: "en"))
+            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "a", languageId: "en"))
             XCTAssertEqual(test, "a")
         } catch {
             XCTFail()
@@ -224,11 +256,11 @@ class LocalizeTests: XCTestCase {
             ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en"), result: {_ in
             })
              XCTAssertNil(ramCacheRepo?.getLastModify())
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
                 error in
                 XCTAssertNil(error)
             })
-            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "a", language: "en"))
+            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "a", languageId: "en"))
             XCTAssertNotNil(ramCacheRepo?.getLastModify())
             XCTAssertEqual(test, "a")
         } catch {
@@ -250,11 +282,11 @@ class LocalizeTests: XCTestCase {
             ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "fr"), result: {_ in
             })
             XCTAssertNil(ramCacheRepo?.getLastModify())
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "fr"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "fr"), result: {
                 error in
                 XCTAssertEqual(error?.userInfo["code"] as? String, ErrorCode.UNABLE_TO_SAVE_CACHE_CODE.rawValue)
             })
-            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "a", language: "fr"))
+            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "a", languageId: "fr"))
             XCTAssertEqual(test, "a")
             waitForExpectations(timeout: 5, handler: nil)
             XCTAssertEqual(languageNoti, "fr")
@@ -277,11 +309,11 @@ class LocalizeTests: XCTestCase {
             ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 0.0, language: "en"), result: {_ in
             })
             XCTAssertNil(ramCacheRepo?.getLastModify())
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "en"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
                 error in
                 XCTAssertNil(error)
             })
-            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "hello", language: "en"))
+            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "hello", languageId: "en"))
             XCTAssertEqual(test, "Hello")
             waitForExpectations(timeout: 5, handler: nil)
             XCTAssertEqual(languageNoti, "en")
@@ -300,16 +332,16 @@ class LocalizeTests: XCTestCase {
             expectation(forNotification:NSNotification.Name(rawValue: EventHandler.ON_LOAD_LANGUAGE_FAIL.rawValue),
                         object: nil,
                         handler: handler)
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "th"), result: {
                 error in
                 XCTAssertNil(error)
             })
             ramCacheRepo?.saveLastModify(data: ["th":0.0])
-            try localizeService?.loadLanguage(input: LoadLanguageInput(language: "th"), result: {
+            try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "th"), result: {
                 error in
                 XCTAssertNotNil(error)
             })
-            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "hello", language: "th"))
+            let test = try localizeService?.getLocalizeText(input: GetLocalizeTextInput(key: "hello", languageId: "th"))
             XCTAssertEqual(test, "สวัสดี")
             waitForExpectations(timeout: 5, handler: nil)
             XCTAssertEqual(languageNoti, "th")

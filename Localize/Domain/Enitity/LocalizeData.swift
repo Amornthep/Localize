@@ -12,6 +12,7 @@ public class LocalizeData: NSObject, NSCoding {
     open var data:[String:String] = [:]
     open var lastModify:Double?
     open var language:String?
+    open var languageId:String?
     
     override init(){
         

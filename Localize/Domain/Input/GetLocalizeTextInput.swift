@@ -10,18 +10,18 @@ import CoreFoundation
 
 public struct GetLocalizeTextInput {
     let key:String!
-    let language:String!
+    let languageId:String!
     
-    public init(key:String, language:String) {
+    public init(key:String, languageId:String) {
         self.key = key
-        self.language = language
+        self.languageId = languageId
     }
     
     func validate() throws{
         if key == "" {
             throw LocalizeError.invalidInputException(code: ErrorCode.INVALID_KEY_CODE, message: ErrorMessage.INVALID_KEY_MESSAGE)
         }
-        if language == ""{
+        if languageId == ""{
             throw LocalizeError.invalidInputException(code: ErrorCode.INVALID_LANGUAGE_CODE, message: ErrorMessage.INVALID_LANGUAGE_MESSAGE)
         }
     }

@@ -16,9 +16,9 @@ public class LocalizeService: ILocalizeService {
     let LANGUAGE = "language"
     public func getLocalizeText(input: GetLocalizeTextInput) throws -> String {
         try input.validate()
-        var text = localizationCacheRepository.getText(key: input.key, language: input.language)
+        var text = localizationCacheRepository.getText(key: input.key, language: input.languageId)
         if text == input.key {
-            self.postEvent(eventHandler: EventHandler.ON_KEY_NOT_EXIST, userInfo: [input.language:input.key])
+            self.postEvent(eventHandler: EventHandler.ON_KEY_NOT_EXIST, userInfo: [input.languageId:input.key])
             text = localizationCacheRepository.getText(key: input.key, language: defaultLanguage)
             if text == input.key {
                 self.postEvent(eventHandler: EventHandler.ON_KEY_NOT_EXIST, userInfo: [defaultLanguage:input.key])
@@ -43,8 +43,8 @@ public class LocalizeService: ILocalizeService {
         })
     }
     
-    private func getLocalizeAndSave(namespace:String, language:String, result: @escaping (NSError?) -> Void){
-        localizationRepository.get(namespace: namespace, language: language) {[weak self] (localizeData, error) in
+    private func getLocalizeAndSave(language:String, result: @escaping (NSError?) -> Void){
+        localizationRepository.get(language: language) {[weak self] (localizeData, error) in
             if let error = error , let languageKey = self?.LANGUAGE{
                 self?.postEvent(eventHandler: EventHandler.ON_LOAD_LANGUAGE_FAIL, userInfo: [languageKey:language])
                 result(error)
@@ -61,12 +61,17 @@ public class LocalizeService: ILocalizeService {
         return true
     }
     
+    public func loadLanguages(input: LoadLanguagesInput, result: @escaping (LanguageList?, NSError?) -> Void) throws {
+        try input.validate()
+        localizationRepository.getLanguages(namespace: input.namespace, limit: 10, nextToken: nil, result: result)
+    }
+    
     public func loadLanguage(input: LoadLanguageInput, result: @escaping (NSError?) -> Void) throws {
         try input.validate()
-        if let localizeData = localizationCacheRepository.getLocalizeData(language: input.language) {
+        if let localizeData = localizationCacheRepository.getLocalizeData(language: input.languageId) {
             if let lastModify = localizationCacheRepository.getLastModify(){
                 if compareLanguageNeedUpdate(lastModify: lastModify, localizeData: localizeData){
-                    getLocalizeAndSave(namespace: namespace, language: input.language, result: result)
+                    getLocalizeAndSave(language: input.languageId, result: result)
                 }else{
                     result(nil)
                 }
@@ -78,7 +83,7 @@ public class LocalizeService: ILocalizeService {
                     }else if let lastModify = lastModify{
                         self?.localizationCacheRepository.saveLastModify(data: lastModify)
                         if self?.compareLanguageNeedUpdate(lastModify: lastModify, localizeData: localizeData) ?? false{
-                            self?.getLocalizeAndSave(namespace: (self?.namespace)!, language: input.language, result: result)
+                            self?.getLocalizeAndSave(language: input.languageId, result: result)
                         }else{
                             result(nil)
                         }
@@ -86,7 +91,7 @@ public class LocalizeService: ILocalizeService {
                 }
             }
         }else{
-            getLocalizeAndSave(namespace: namespace, language: input.language, result: result)
+            getLocalizeAndSave(language: input.languageId, result: result)
         }
     }
     

@@ -9,18 +9,16 @@
 import CoreFoundation
 
 public struct LoadLanguageInput {
-    let language:String!
-    let forceUpdate:Bool!
+    let languageId:String!
     
     func validate() throws{
-        if language == ""{
+        if languageId == ""{
             throw LocalizeError.invalidInputException(code: ErrorCode.INVALID_LANGUAGE_CODE, message: ErrorMessage.INVALID_LANGUAGE_MESSAGE)
         }
     }
     
-    public init(language:String, forceUpdate:Bool = false) {
-        self.language = language
-        self.forceUpdate = forceUpdate
+    public init(languageId:String) {
+        self.languageId = languageId
     }
 }
 
