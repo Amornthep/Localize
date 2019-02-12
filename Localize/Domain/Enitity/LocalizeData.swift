@@ -18,23 +18,26 @@ public class LocalizeData: NSObject, NSCoding {
         
     }
     
-    public init(data:[String:String], lastModify:Double, language:String){
+    public init(data:[String:String], lastModify:Double, language:String, languageId:String){
         self.data = data
         self.lastModify = lastModify
         self.language = language
+        self.languageId = languageId
     }
     
     required convenience public init(coder aDecoder: NSCoder) {
         let data = aDecoder.decodeObject(forKey: "data") as! [String:String]
         let lastModify = aDecoder.decodeObject(forKey: "lastModify") as! Double
         let language = aDecoder.decodeObject(forKey: "language") as! String
-        self.init(data: data, lastModify:lastModify, language:language)
+        let languageId = aDecoder.decodeObject(forKey: "languageId") as! String
+        self.init(data: data, lastModify:lastModify, language:language, languageId:languageId)
     }
     
     public func encode(with aCoder: NSCoder) {
         aCoder.encode(data, forKey: "data")
         aCoder.encode(lastModify, forKey: "lastModify")
         aCoder.encode(language, forKey: "language")
+        aCoder.encode(languageId, forKey: "languageId")
     }
     
 }
