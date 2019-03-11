@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "ACLocalize"
-  s.version      = "1.1.2"
+  s.version      = "1.1.3"
   s.summary      = "i18n"
   s.platform     = :ios, "10.0"
   # This description is used to generate tags and improve search results.

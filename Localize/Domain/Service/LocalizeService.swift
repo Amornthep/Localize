@@ -63,7 +63,7 @@ public class LocalizeService: ILocalizeService {
     
     public func loadLanguages(input: LoadLanguagesInput, result: @escaping (LanguageList?, NSError?) -> Void) throws {
         try input.validate()
-        localizationRepository.getLanguages(namespace: input.namespace, limit: 10, nextToken: nil, result: result)
+        localizationRepository.getLanguages(namespace: input.namespace, limit: input.limit, nextToken: input.nextToken, result: result)
     }
     
     public func loadLanguage(input: LoadLanguageInput, result: @escaping (NSError?) -> Void) throws {

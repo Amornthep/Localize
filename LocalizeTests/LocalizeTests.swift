@@ -188,7 +188,7 @@ class LocalizeTests: XCTestCase {
         do {
             var language:String?
             ramCacheRepo?.saveLastModify(data: ["fr":2.0])
-            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "fr"), result: {_ in
+            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "fr" , languageId:"fr"), result: {_ in
             })
             let handler = { (notification: Notification) -> Bool in
                 language = notification.userInfo?["language"] as? String
@@ -215,7 +215,7 @@ class LocalizeTests: XCTestCase {
         
         do {
             var notificationCall = false
-            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en"), result: {_ in
+            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en", languageId:"en"), result: {_ in
             })
             let handler = { (notification: Notification) -> Bool in
                 notificationCall = true
@@ -238,7 +238,7 @@ class LocalizeTests: XCTestCase {
     func testGetLanguageSuccess(){
         do {
             ramCacheRepo?.saveLastModify(data: ["en":1.0])
-            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en"), result: {_ in
+            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en", languageId:"en"), result: {_ in
             })
             try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
                 error in
@@ -253,7 +253,7 @@ class LocalizeTests: XCTestCase {
     
     func testGetLastModifyAndGetLanguageSuccess(){
         do {
-            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en"), result: {_ in
+            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "en", languageId:"en"), result: {_ in
             })
              XCTAssertNil(ramCacheRepo?.getLastModify())
             try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
@@ -279,7 +279,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "fr"), result: {_ in
+            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 1.0, language: "fr", languageId:"fr"), result: {_ in
             })
             XCTAssertNil(ramCacheRepo?.getLastModify())
             try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "fr"), result: {
@@ -306,7 +306,7 @@ class LocalizeTests: XCTestCase {
                         object: nil,
                         handler: handler)
             
-            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 0.0, language: "en"), result: {_ in
+            ramCacheRepo?.saveLocalizeData(localizeData: LocalizeData(data: ["a":"a"], lastModify: 0.0, language: "en", languageId:"fr"), result: {_ in
             })
             XCTAssertNil(ramCacheRepo?.getLastModify())
             try localizeService?.loadLanguage(input: LoadLanguageInput(languageId: "en"), result: {
